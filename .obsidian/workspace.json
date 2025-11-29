@@ -1,0 +1,90 @@
+{
+  "main": {
+    "id": "main",
+    "type": "split",
+    "children": [
+      {
+        "id": "leaf",
+        "type": "leaf",
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "00-ГЛАВНАЯ.md",
+            "mode": "preview"
+          }
+        }
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "left",
+    "type": "split",
+    "children": [
+      {
+        "id": "left-tabs",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "file-explorer",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer"
+            }
+          },
+          {
+            "id": "search",
+            "type": "leaf",
+            "state": {
+              "type": "search"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 250
+  },
+  "right": {
+    "id": "right",
+    "type": "split",
+    "children": [
+      {
+        "id": "right-tabs",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "backlink",
+            "type": "leaf",
+            "state": {
+              "type": "backlink"
+            }
+          },
+          {
+            "id": "outgoing-link",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link"
+            }
+          },
+          {
+            "id": "tag-pane",
+            "type": "leaf",
+            "state": {
+              "type": "tag"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 250,
+    "collapsed": true
+  },
+  "active": "leaf",
+  "lastOpenFiles": [
+    "00-ГЛАВНАЯ.md",
+    "ПРОГРЕСС.md",
+    "architecture.md"
+  ]
+}

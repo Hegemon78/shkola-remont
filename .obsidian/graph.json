@@ -1,0 +1,49 @@
+{
+  "collapse-filter": false,
+  "search": "",
+  "showTags": true,
+  "showAttachments": false,
+  "hideUnresolved": false,
+  "showOrphans": true,
+  "collapse-color-groups": false,
+  "colorGroups": [
+    {
+      "query": "path:направления",
+      "color": {
+        "a": 1,
+        "rgb": 5287167
+      }
+    },
+    {
+      "query": "path:технологии",
+      "color": {
+        "a": 1,
+        "rgb": 16744448
+      }
+    },
+    {
+      "query": "path:база-данных",
+      "color": {
+        "a": 1,
+        "rgb": 65407
+      }
+    },
+    {
+      "query": "path:этапы",
+      "color": {
+        "a": 1,
+        "rgb": 16711935
+      }
+    }
+  ],
+  "collapse-display": false,
+  "showArrow": true,
+  "textFadeMultiplier": 0,
+  "nodeSizeMultiplier": 1,
+  "lineSizeMultiplier": 1,
+  "collapse-forces": false,
+  "centerStrength": 0.5,
+  "repelStrength": 10,
+  "linkStrength": 1,
+  "linkDistance": 250
+}
