@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Виртуальная Школа Ремонта — Карта проекта</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
+
+        .header {
+            padding: 20px 40px;
+            background: rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .stats {
+            display: flex;
+            gap: 30px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #4ade80;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #888;
+            text-transform: uppercase;
+        }
+
+        .filters {
+            padding: 15px 40px;
+            background: rgba(0,0,0,0.2);
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border: 1px solid #444;
+            background: transparent;
+            color: #fff;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 13px;
+        }
+
+        .filter-btn:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .filter-btn.active {
+            background: #4ade80;
+            border-color: #4ade80;
+            color: #000;
+        }
+
+        .main {
+            padding: 30px 40px;
+            display: flex;
+            gap: 30px;
+        }
+
+        .timeline {
+            flex: 2;
+        }
+
+        .sidebar {
+            flex: 1;
+            max-width: 350px;
+        }
+
+        .stage {
+            margin-bottom: 20px;
+        }
+
+        .stage-header {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #888;
+            margin-bottom: 15px;
+            padding-left: 10px;
+            border-left: 3px solid #4ade80;
+        }
+
+        .stage-header.chernovaya {
+            border-color: #f97316;
+        }
+
+        .stage-header.chistovaya {
+            border-color: #3b82f6;
+        }
+
+        .directions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .direction {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 15px;
+            width: calc(25% - 9px);
+            min-width: 180px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .direction:hover {
+            transform: translateY(-3px);
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        .direction.selected {
+            border-color: #4ade80;
+            background: rgba(74, 222, 128, 0.1);
+        }
+
+        .direction-id {
+            font-size: 11px;
+            color: #888;
+            margin-bottom: 5px;
+        }
+
+        .direction-name {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .direction-tech {
+            font-size: 12px;
+            color: #4ade80;
+        }
+
+        .direction-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .direction-badge.chernovaya {
+            background: #f97316;
+        }
+
+        .direction-badge.chistovaya {
+            background: #3b82f6;
+        }
+
+        .direction-badge.both {
+            background: linear-gradient(135deg, #f97316 50%, #3b82f6 50%);
+        }
+
+        /* Блоки */
+        .block-kommunikacii .direction { border-left: 3px solid #f59e0b; }
+        .block-konstruktiv .direction { border-left: 3px solid #8b5cf6; }
+        .block-otdelka .direction { border-left: 3px solid #ec4899; }
+        .block-poly .direction { border-left: 3px solid #06b6d4; }
+        .block-dveri .direction { border-left: 3px solid #10b981; }
+
+        .detail-panel {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 25px;
+            position: sticky;
+            top: 20px;
+        }
+
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .detail-id {
+            font-size: 12px;
+            color: #4ade80;
+            margin-bottom: 5px;
+        }
+
+        .detail-name {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .detail-stages {
+            display: flex;
+            gap: 5px;
+        }
+
+        .stage-tag {
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 10px;
+            text-transform: uppercase;
+        }
+
+        .stage-tag.chernovaya {
+            background: rgba(249, 115, 22, 0.2);
+            color: #f97316;
+        }
+
+        .stage-tag.chistovaya {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+        }
+
+        .detail-section {
+            margin-bottom: 20px;
+        }
+
+        .detail-section-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        .tech-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .tech-item {
+            background: rgba(0,0,0,0.2);
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tech-id {
+            color: #888;
+            font-size: 11px;
+        }
+
+        .deps-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .dep-tag {
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .dep-tag.before {
+            border: 1px solid #f97316;
+            color: #f97316;
+        }
+
+        .dep-tag.after {
+            border: 1px solid #3b82f6;
+            color: #3b82f6;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4ade80, #22c55e);
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        /* Connections visualization */
+        .graph-view {
+            display: none;
+            padding: 20px;
+        }
+
+        .graph-view.active {
+            display: block;
+        }
+
+        .view-toggle {
+            display: flex;
+            gap: 5px;
+            background: rgba(0,0,0,0.3);
+            padding: 4px;
+            border-radius: 8px;
+        }
+
+        .view-btn {
+            padding: 6px 12px;
+            border: none;
+            background: transparent;
+            color: #888;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .view-btn.active {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+        }
+
+        /* Canvas для графа */
+        #graphCanvas {
+            width: 100%;
+            height: 500px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Виртуальная Школа Ремонта</h1>
+        <div class="view-toggle">
+            <button class="view-btn active" onclick="showView('cards')">Карточки</button>
+            <button class="view-btn" onclick="showView('graph')">Граф связей</button>
+        </div>
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value">19</div>
+                <div class="stat-label">Направлений</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">19</div>
+                <div class="stat-label">Технологий</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="progressPercent">10%</div>
+                <div class="stat-label">Готовность</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="filters">
+        <button class="filter-btn active" data-filter="all">Все направления</button>
+        <button class="filter-btn" data-filter="chernovaya">Черновые</button>
+        <button class="filter-btn" data-filter="chistovaya">Чистовые</button>
+        <button class="filter-btn" data-filter="kommunikacii">Коммуникации</button>
+        <button class="filter-btn" data-filter="otdelka">Отделка</button>
+        <button class="filter-btn" data-filter="poly">Полы</button>
+        <button class="filter-btn" data-filter="dveri">Двери/Окна</button>
+    </div>
+
+    <div class="main" id="cardsView">
+        <div class="timeline">
+            <!-- Системное -->
+            <div class="stage">
+                <div class="stage-header">Системное (всегда)</div>
+                <div class="directions">
+                    <div class="direction" data-id="D00" data-block="system" data-stages="both">
+                        <span class="direction-badge both"></span>
+                        <div class="direction-id">D00</div>
+                        <div class="direction-name">Культура производства</div>
+                        <div class="direction-tech">1 технология</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Подготовка -->
+            <div class="stage">
+                <div class="stage-header chernovaya">Подготовка</div>
+                <div class="directions">
+                    <div class="direction" data-id="D01" data-block="podgotovka" data-stages="chernovaya">
+                        <span class="direction-badge chernovaya"></span>
+                        <div class="direction-id">D01</div>
+                        <div class="direction-name">Демонтаж</div>
+                        <div class="direction-tech">1 технология</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Коммуникации -->
+            <div class="stage block-kommunikacii">
+                <div class="stage-header chernovaya">Коммуникации (черновые)</div>
+                <div class="directions">
+                    <div class="direction" data-id="D02" data-block="kommunikacii" data-stages="both">
+                        <span class="direction-badge both"></span>
+                        <div class="direction-id">D02</div>
+                        <div class="direction-name">Электрика</div>
+                        <div class="direction-tech">1 технология</div>
+                    </div>
+                    <div class="direction" data-id="D03" data-block="kommunikacii" data-stages="both">
+                        <span class="direction-badge both"></span>
+                        <div class="direction-id">D03</div>
+                        <div class="direction-name">Слаботочка</div>
+                        <div class="direction-tech">1 технология</div>
+                    </div>
+                    <div class="direction" data-id="D04" data-block="kommunikacii" data-stages="both">
+                        <span class="direction-badge both"></span>
+                        <div class="direction-id">D04</div>
+                        <div class="direction-name">Сантехника</div>
+                        <div class="direction-tech">1 технология</div>
+                    </div>
+                    <div class="direction" data-id="D05" data-block="kommunikacii" data-stages="both">
+                        <span class="direction-badge both"></span>
+                        <div class="direction-id">D05</div>
+                        <div class="direction-name">Климат</div>
+                        <div class="direction-tech">1 технология</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Конструктив -->
+            <div class="stage block-konstruktiv">
+                <div class="stage-header chernovaya">Конструктив</div>
+                <div class="directions">
+                    <div class="direction" data-id="D06" data-block="konstruktiv" data-stages="both">
+                        <span class="direction-badge both"></span>
+                        <div class="direction-id">D06</div>
+                        <div class="direction-name">Монтаж</div>
+                        <div class="direction-tech">1 технология</div>
+                    </div>
+                    <div class="direction" data-id="D07" data-block="konstruktiv" data-stages="chernovaya">
+                        <span class="direction-badge chernovaya"></span>
+                        <div class="direction-id">D07</div>
+                        <div class="direction-name">Изоляция</div>
+                        <div class="direction-tech">1 технология</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Полы черновые -->
+            <div class="stage block-poly">
+                <div class="stage-header chernovaya">Полы</div>
+                <div class="directions">
+                    <div class="direction" data-id="D13" data-block="poly" data-stages="chernovaya">
+                        <span class="direction-badge chernovaya"></span>
+                        <div class="direction-id">D13</div>
+                        <div class="direction-name">Полы черновые</div>
+                        <div class="direction-tech">1 технология</div>
+                    </div>
+                    <div class="direction" data-id="D14" data-block="poly" data-stages="chistovaya">
+                        <span class="direction-badge chistovaya"></span>
+                        <div class="direction-id">D14</div>
+                        <div class="direction-name">Полы чистовые</div>
+                        <div class="direction-tech">1 технология</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Отделка -->
+            <div class="stage block-otdelka">
+                <div class="stage-header">Отделка</div>
+                <div class="directions">
+                    <div class="direction" data-id="D08" data-block="otdelka" data-stages="chernovaya">
+                        <span class="direction-badge chernovaya"></span>
+                        <div class="direction-id">D08</div>
+                        <div class="direction-name">Подготовка стен</div>
+                        <div class="direction-tech">1 технология</div>
+                    </div>
+                    <div class="direction" data-id="D09" data-block="otdelka" data-stages="chernovaya">
+                        <span class="direction-badge chernovaya"></span>
+                        <div class="direction-id">D09</div>
+                        <div class="direction-name">Штукатурка</div>
+                        <div class="direction-tech">1 технология</div>
+                    </div>
+                    <div class="direction" data-id="D10" data-block="otdelka" data-stages="chistovaya">
+                        <span class="direction-badge chistovaya"></span>
+                        <div class="direction-id">D10</div>
+                        <div class="direction-name">Покраска</div>
+                        <div class="direction-tech">1 технология</div>
+                    </div>
+                    <div class="direction" data-id="D11" data-block="otdelka" data-stages="chistovaya">
+                        <span class="direction-badge chistovaya"></span>
+                        <div class="direction-id">D11</div>
+                        <div class="direction-name">Обои</div>
+                        <div class="direction-tech">1 технология</div>
+                    </div>
+                    <div class="direction" data-id="D12" data-block="otdelka" data-stages="chistovaya">
+                        <span class="direction-badge chistovaya"></span>
+                        <div class="direction-id">D12</div>
+                        <div class="direction-name">Плитка</div>
+                        <div class="direction-tech">1 технология</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Двери и окна -->
+            <div class="stage block-dveri">
+                <div class="stage-header chistovaya">Двери и окна</div>
+                <div class="directions">
+                    <div class="direction" data-id="D15" data-block="dveri" data-stages="chistovaya">
+                        <span class="direction-badge chistovaya"></span>
+                        <div class="direction-id">D15</div>
+                        <div class="direction-name">Окна</div>
+                        <div class="direction-tech">1 технология</div>
+                    </div>
+                    <div class="direction" data-id="D16" data-block="dveri" data-stages="chistovaya">
+                        <span class="direction-badge chistovaya"></span>
+                        <div class="direction-id">D16</div>
+                        <div class="direction-name">Двери межкомнатные</div>
+                        <div class="direction-tech">1 технология</div>
+                    </div>
+                    <div class="direction" data-id="D17" data-block="dveri" data-stages="chistovaya">
+                        <span class="direction-badge chistovaya"></span>
+                        <div class="direction-id">D17</div>
+                        <div class="direction-name">Двери входные</div>
+                        <div class="direction-tech">1 технология</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Фасад -->
+            <div class="stage">
+                <div class="stage-header">Фасад (отдельный цикл)</div>
+                <div class="directions">
+                    <div class="direction" data-id="D18" data-block="fasad" data-stages="both">
+                        <span class="direction-badge both"></span>
+                        <div class="direction-id">D18</div>
+                        <div class="direction-name">Фасад</div>
+                        <div class="direction-tech">1 технология</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <div class="detail-panel" id="detailPanel">
+                <div class="empty-state">
+                    <div class="empty-state-icon">👆</div>
+                    <div>Выберите направление для просмотра деталей</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Граф связей -->
+    <div class="graph-view" id="graphView">
+        <canvas id="graphCanvas"></canvas>
+    </div>
+
+    <script>
+        // Данные направлений
+        const directions = {
+            D00: {
+                name: "Культура производства",
+                stages: ["черновая", "чистовая"],
+                block: "Системное",
+                technologies: [
+                    { id: "T-KP-001", name: "Организация рабочего места" }
+                ],
+                before: [],
+                after: ["D01", "D02", "D03", "D04", "D05", "D06", "D07"]
+            },
+            D01: {
+                name: "Демонтаж",
+                stages: ["черновая"],
+                block: "Подготовка",
+                technologies: [
+                    { id: "T-DM-001", name: "Демонтаж кирпичных перегородок" }
+                ],
+                before: ["D00"],
+                after: ["D02", "D03", "D04", "D05"]
+            },
+            D02: {
+                name: "Электрика",
+                stages: ["черновая", "чистовая"],
+                block: "Коммуникации",
+                technologies: [
+                    { id: "T-EL-001", name: "Штробление штроборезом" }
+                ],
+                before: ["D01"],
+                after: ["D06", "D07", "D13"]
+            },
+            D03: {
+                name: "Слаботочка",
+                stages: ["черновая", "чистовая"],
+                block: "Коммуникации",
+                technologies: [
+                    { id: "T-SL-001", name: "Прокладка UTP кабеля" }
+                ],
+                before: ["D01"],
+                after: ["D06", "D07"]
+            },
+            D04: {
+                name: "Сантехника",
+                stages: ["черновая", "чистовая"],
+                block: "Коммуникации",
+                technologies: [
+                    { id: "T-SN-001", name: "Разводка водоснабжения ППР" }
+                ],
+                before: ["D01"],
+                after: ["D07", "D12", "D13"]
+            },
+            D05: {
+                name: "Климат",
+                stages: ["черновая", "чистовая"],
+                block: "Коммуникации",
+                technologies: [
+                    { id: "T-KL-001", name: "Прокладка трасс кондиционера" }
+                ],
+                before: ["D01", "D02"],
+                after: ["D09", "D10", "D11"]
+            },
+            D06: {
+                name: "Монтаж",
+                stages: ["черновая", "чистовая"],
+                block: "Конструктив",
+                technologies: [
+                    { id: "T-MN-001", name: "Кладка газоблока" }
+                ],
+                before: ["D02", "D03"],
+                after: ["D07", "D08"]
+            },
+            D07: {
+                name: "Изоляция",
+                stages: ["черновая"],
+                block: "Конструктив",
+                technologies: [
+                    { id: "T-IZ-001", name: "Звукоизоляция стен каркасом" }
+                ],
+                before: ["D02", "D03", "D04", "D05", "D06"],
+                after: ["D08", "D09", "D12", "D13"]
+            },
+            D08: {
+                name: "Подготовка стен",
+                stages: ["черновая"],
+                block: "Отделка",
+                technologies: [
+                    { id: "T-PD-001", name: "Грунтовка глубокого проникновения" }
+                ],
+                before: ["D06", "D07"],
+                after: ["D09"]
+            },
+            D09: {
+                name: "Штукатурка",
+                stages: ["черновая"],
+                block: "Отделка",
+                technologies: [
+                    { id: "T-SH-010", name: "Установка маяков" }
+                ],
+                before: ["D08"],
+                after: ["D10", "D11", "D12"]
+            },
+            D10: {
+                name: "Покраска",
+                stages: ["чистовая"],
+                block: "Отделка",
+                technologies: [
+                    { id: "T-PK-001", name: "Покраска стен валиком" }
+                ],
+                before: ["D09"],
+                after: ["D14", "D15", "D16"]
+            },
+            D11: {
+                name: "Обои",
+                stages: ["чистовая"],
+                block: "Отделка",
+                technologies: [
+                    { id: "T-OB-010", name: "Поклейка флизелиновых обоев" }
+                ],
+                before: ["D09"],
+                after: ["D14", "D15", "D16"]
+            },
+            D12: {
+                name: "Плитка",
+                stages: ["чистовая"],
+                block: "Отделка",
+                technologies: [
+                    { id: "T-PL-001", name: "Укладка керамогранита на пол" }
+                ],
+                before: ["D07", "D09", "D13"],
+                after: ["D04", "D14"]
+            },
+            D13: {
+                name: "Полы черновые",
+                stages: ["черновая"],
+                block: "Полы",
+                technologies: [
+                    { id: "T-PC-040", name: "Мокрая стяжка по маякам" }
+                ],
+                before: ["D02", "D04", "D07"],
+                after: ["D12", "D14"]
+            },
+            D14: {
+                name: "Полы чистовые",
+                stages: ["чистовая"],
+                block: "Полы",
+                technologies: [
+                    { id: "T-PF-001", name: "Укладка ламината плавающим способом" }
+                ],
+                before: ["D10", "D11", "D12"],
+                after: ["D15", "D16", "D17"]
+            },
+            D15: {
+                name: "Окна",
+                stages: ["чистовая"],
+                block: "Двери/Окна",
+                technologies: [
+                    { id: "T-OK-001", name: "Установка ПВХ окна" }
+                ],
+                before: ["D14"],
+                after: []
+            },
+            D16: {
+                name: "Двери межкомнатные",
+                stages: ["чистовая"],
+                block: "Двери/Окна",
+                technologies: [
+                    { id: "T-DI-001", name: "Установка распашной двери" }
+                ],
+                before: ["D14"],
+                after: []
+            },
+            D17: {
+                name: "Двери входные",
+                stages: ["чистовая"],
+                block: "Двери/Окна",
+                technologies: [
+                    { id: "T-DV-001", name: "Установка металлической двери" }
+                ],
+                before: ["D14"],
+                after: []
+            },
+            D18: {
+                name: "Фасад",
+                stages: ["черновая", "чистовая"],
+                block: "Фасад",
+                technologies: [
+                    { id: "T-FS-001", name: "Утепление фасада пенополистиролом" }
+                ],
+                before: ["D06", "D07"],
+                after: []
+            }
+        };
+
+        // Выбор направления
+        let selectedDirection = null;
+
+        document.querySelectorAll('.direction').forEach(el => {
+            el.addEventListener('click', () => {
+                document.querySelectorAll('.direction').forEach(d => d.classList.remove('selected'));
+                el.classList.add('selected');
+                selectedDirection = el.dataset.id;
+                showDetail(selectedDirection);
+            });
+        });
+
+        function showDetail(id) {
+            const d = directions[id];
+            const panel = document.getElementById('detailPanel');
+
+            panel.innerHTML = `
+                <div class="detail-header">
+                    <div>
+                        <div class="detail-id">${id}</div>
+                        <div class="detail-name">${d.name}</div>
+                    </div>
+                    <div class="detail-stages">
+                        ${d.stages.map(s => `<span class="stage-tag ${s === 'черновая' ? 'chernovaya' : 'chistovaya'}">${s}</span>`).join('')}
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title">Блок: ${d.block}</div>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title">Технологии (${d.technologies.length})</div>
+                    <div class="tech-list">
+                        ${d.technologies.map(t => `
+                            <div class="tech-item">
+                                <span>${t.name}</span>
+                                <span class="tech-id">${t.id}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                ${d.before.length > 0 ? `
+                <div class="detail-section">
+                    <div class="detail-section-title">Зависит от (ДО)</div>
+                    <div class="deps-list">
+                        ${d.before.map(dep => `<span class="dep-tag before">${dep} ${directions[dep]?.name || ''}</span>`).join('')}
+                    </div>
+                </div>
+                ` : ''}
+
+                ${d.after.length > 0 ? `
+                <div class="detail-section">
+                    <div class="detail-section-title">Открывает (ПОСЛЕ)</div>
+                    <div class="deps-list">
+                        ${d.after.map(dep => `<span class="dep-tag after">${dep} ${directions[dep]?.name || ''}</span>`).join('')}
+                    </div>
+                </div>
+                ` : ''}
+
+                <div class="detail-section">
+                    <div class="detail-section-title">Прогресс заполнения</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${d.technologies.length > 0 ? 20 : 0}%"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Фильтры
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const filter = btn.dataset.filter;
+
+                document.querySelectorAll('.direction').forEach(d => {
+                    const stages = d.dataset.stages;
+                    const block = d.dataset.block;
+
+                    let show = true;
+
+                    if (filter === 'chernovaya') {
+                        show = stages === 'chernovaya' || stages === 'both';
+                    } else if (filter === 'chistovaya') {
+                        show = stages === 'chistovaya' || stages === 'both';
+                    } else if (filter !== 'all') {
+                        show = block === filter;
+                    }
+
+                    d.style.display = show ? 'block' : 'none';
+                });
+            });
+        });
+
+        // Переключение видов
+        function showView(view) {
+            document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector(`.view-btn[onclick="showView('${view}')"]`).classList.add('active');
+
+            if (view === 'cards') {
+                document.getElementById('cardsView').style.display = 'flex';
+                document.getElementById('graphView').classList.remove('active');
+            } else {
+                document.getElementById('cardsView').style.display = 'none';
+                document.getElementById('graphView').classList.add('active');
+                drawGraph();
+            }
+        }
+
+        // Рисование графа связей
+        function drawGraph() {
+            const canvas = document.getElementById('graphCanvas');
+            const ctx = canvas.getContext('2d');
+
+            canvas.width = canvas.offsetWidth * 2;
+            canvas.height = canvas.offsetHeight * 2;
+            ctx.scale(2, 2);
+
+            const width = canvas.offsetWidth;
+            const height = canvas.offsetHeight;
+
+            // Позиции узлов
+            const positions = {
+                D00: { x: width/2, y: 40 },
+                D01: { x: width/2, y: 100 },
+                D02: { x: width/5, y: 170 },
+                D03: { x: width*2/5, y: 170 },
+                D04: { x: width*3/5, y: 170 },
+                D05: { x: width*4/5, y: 170 },
+                D06: { x: width/3, y: 240 },
+                D07: { x: width*2/3, y: 240 },
+                D13: { x: width/2, y: 300 },
+                D08: { x: width/4, y: 340 },
+                D09: { x: width/2, y: 340 },
+                D10: { x: width/5, y: 400 },
+                D11: { x: width*2/5, y: 400 },
+                D12: { x: width*3/5, y: 400 },
+                D14: { x: width/2, y: 450 },
+                D15: { x: width/4, y: 490 },
+                D16: { x: width/2, y: 490 },
+                D17: { x: width*3/4, y: 490 },
+                D18: { x: width*5/6, y: 300 }
+            };
+
+            // Рисуем связи
+            ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+            ctx.lineWidth = 1;
+
+            Object.keys(directions).forEach(id => {
+                const d = directions[id];
+                const from = positions[id];
+
+                d.after.forEach(afterId => {
+                    const to = positions[afterId];
+                    if (from && to) {
+                        ctx.beginPath();
+                        ctx.moveTo(from.x, from.y);
+                        ctx.lineTo(to.x, to.y);
+                        ctx.stroke();
+                    }
+                });
+            });
+
+            // Рисуем узлы
+            Object.keys(positions).forEach(id => {
+                const pos = positions[id];
+                const d = directions[id];
+
+                // Круг
+                ctx.beginPath();
+                ctx.arc(pos.x, pos.y, 20, 0, Math.PI * 2);
+
+                // Цвет в зависимости от этапа
+                if (d.stages.includes('черновая') && d.stages.includes('чистовая')) {
+                    const gradient = ctx.createLinearGradient(pos.x - 20, pos.y, pos.x + 20, pos.y);
+                    gradient.addColorStop(0, '#f97316');
+                    gradient.addColorStop(1, '#3b82f6');
+                    ctx.fillStyle = gradient;
+                } else if (d.stages.includes('черновая')) {
+                    ctx.fillStyle = '#f97316';
+                } else {
+                    ctx.fillStyle = '#3b82f6';
+                }
+
+                ctx.fill();
+
+                // ID
+                ctx.fillStyle = '#fff';
+                ctx.font = '10px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(id, pos.x, pos.y);
+
+                // Название под узлом
+                ctx.fillStyle = 'rgba(255,255,255,0.6)';
+                ctx.font = '9px sans-serif';
+                ctx.fillText(d.name, pos.x, pos.y + 30);
+            });
+        }
+
+        // Инициализация
+        window.addEventListener('resize', () => {
+            if (document.getElementById('graphView').classList.contains('active')) {
+                drawGraph();
+            }
+        });
+    </script>
+</body>
+</html>
