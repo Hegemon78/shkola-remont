@@ -11,10 +11,17 @@
             "id": "64c7a309ba9f257c",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
-              "icon": "lucide-file",
-              "title": "Новая вкладка"
+              "type": "canvas",
+              "state": {
+                "file": "КАРТА-ПРОЕКТА.canvas",
+                "viewState": {
+                  "x": 420,
+                  "y": 570,
+                  "zoom": -1.0733731863302196
+                }
+              },
+              "icon": "lucide-layout-dashboard",
+              "title": "КАРТА-ПРОЕКТА"
             }
           }
         ]
@@ -165,6 +172,17 @@
   },
   "active": "64c7a309ba9f257c",
   "lastOpenFiles": [
+    "app/public/index-matrix.html",
+    "app/public/index_backup.html",
+    "app/public/index.html.old",
+    "improve_nav.py",
+    "app/public/index.html.original",
+    "app/public/index-simplified.html",
+    "app/public/index.html.backup",
+    "app/package.json",
+    "app/public/index.html",
+    "app/public/data.json",
+    "app/scripts/build-data.js",
     "технологии/обои/T-OB-042-приклеивание-отошедших-швов.md",
     "технологии/обои/T-OB-041-подрезка-у-потолка-и-пола.md",
     "технологии/обои/T-OB-040-прокатка-и-удаление-пузырей.md",
@@ -190,16 +208,6 @@
     "технологии/окна/T-OK-031-пароизоляция-монтажного-шва.md",
     "технологии/окна/T-OK-030-утепление-откосов.md",
     "технологии/окна/T-OK-022-откосы-из-гкл.md",
-    "технологии/окна/T-OK-021-пластиковые-откосы.md",
-    "КАРТА-ПРОЕКТА.canvas",
-    "КАРТА-ПРОЕКТА.html",
-    "scripts/run-one.sh",
-    "scripts/run-parallel.sh",
-    "scripts/logs",
-    "scripts/prompts",
-    "scripts/progress.json",
-    "scripts/fill-technologies.sh",
-    "scripts",
-    "визуализация.html"
+    "КАРТА-ПРОЕКТА.canvas"
   ]
 }

@@ -1,0 +1,2755 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Виртуальная Школа Ремонта</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --bg-card: #161b22;
+      --bg-hover: #21262d;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --green: #3fb950;
+      --yellow: #d29922;
+      --red: #f85149;
+      --purple: #a371f7;
+      --orange: #f0883e;
+      --pink: #db61a2;
+      --cyan: #39c5cf;
+
+      /* Block colors - consolidated to 5 groups */
+      --block-system: #8b949e;     /* Системное */
+      --block-prep: #f85149;       /* Подготовка */
+      --block-comm: #58a6ff;       /* Коммуникации */
+      --block-construct: #a371f7;  /* Конструктив */
+      --block-floors: #f0883e;     /* Полы */
+      --block-finish: #3fb950;     /* Отделка */
+      --block-doors: #58a6ff;      /* Двери/Окна -> merged with Коммуникации color */
+      --block-facade: #8b949e;     /* Фасад -> merged with Системное color */
+
+      /* Typography scale */
+      --font-xs: 10px;    /* tiny counters */
+      --font-sm: 11px;    /* labels, badges */
+      --font-md: 13px;    /* secondary text, captions */
+      --font-base: 14px;  /* body text */
+      --font-lg: 16px;    /* subtitles */
+      --font-xl: 18px;    /* section titles */
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      font-size: 32px;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    h1 span {
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 12px;
+      width: 300px;
+    }
+
+    .search-box input {
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 14px;
+      width: 100%;
+      outline: none;
+    }
+
+    .search-box input::placeholder { color: var(--text-muted); }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-hover) 100%);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 40px 32px;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .hero-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .hero-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 24px;
+      max-width: 700px;
+      margin: 0 auto 28px;
+    }
+
+    .hero-stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hero-stat-value {
+      font-size: 34px; /* Reduced from 42px for better visual hierarchy */
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .hero-stat-label {
+      font-size: 11px; /* Standard: labels = 11px */
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .hero-stat:nth-child(1) .hero-stat-value { color: var(--accent); }
+    .hero-stat:nth-child(2) .hero-stat-value { color: var(--green); }
+    .hero-stat:nth-child(3) .hero-stat-value { color: var(--yellow); }
+    .hero-stat:nth-child(4) .hero-stat-value { color: var(--text-muted); }
+
+    .hero-progress {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .hero-progress-bar {
+      height: 8px;
+      background: var(--bg);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    .hero-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--green), var(--accent));
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    .hero-progress-label {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Stats Bar - Compact */
+    .stats-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 20px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .stats-bar-title {
+      font-size: 16px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stats-bar-metrics {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .stats-metric {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .stats-metric-value {
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .stats-metric-value.accent { color: var(--accent); }
+    .stats-metric-value.green { color: var(--green); }
+
+    .stats-bar-progress {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .stats-progress-bar {
+      width: 120px;
+      height: 8px;
+      background: var(--bg-hover);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .stats-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--green), var(--accent));
+      border-radius: 4px;
+    }
+
+    .stats-progress-label {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 768px) {
+      .stats-bar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .stats-bar-metrics {
+        gap: 16px;
+      }
+    }
+
+    /* Timeline - Horizontal */
+    .timeline-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+    }
+
+    .timeline-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
+    .timeline-header h2 {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .timeline-toggle {
+      font-size: 12px;
+      color: var(--text-muted);
+      transition: transform 0.2s;
+    }
+
+    .timeline-section.collapsed .timeline-toggle {
+      transform: rotate(-90deg);
+    }
+
+    .timeline-section.collapsed .timeline-horizontal {
+      display: none;
+    }
+
+    .timeline-horizontal {
+      display: flex;
+      gap: 4px;
+      margin-top: 16px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .timeline-step {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      min-width: 90px;
+      position: relative;
+    }
+
+    .timeline-step:hover {
+      background: var(--bg-hover);
+    }
+
+    .timeline-step.active {
+      background: rgba(88, 166, 255, 0.15);
+      box-shadow: 0 0 0 2px var(--accent);
+    }
+
+    .timeline-step::after {
+      content: '→';
+      position: absolute;
+      right: -8px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--border);
+      font-size: 12px;
+    }
+
+    .timeline-step:last-child::after {
+      display: none;
+    }
+
+    .timeline-number {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 11px;
+      margin-bottom: 6px;
+    }
+
+    .timeline-title {
+      font-weight: 500;
+      font-size: 11px;
+      text-align: center;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .timeline-count {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Block colors for timeline */
+    .block-system .timeline-number { background: var(--block-system); color: #000; }
+    .block-prep .timeline-number { background: var(--block-prep); color: #fff; }
+    .block-comm .timeline-number { background: var(--block-comm); color: #000; }
+    .block-construct .timeline-number { background: var(--block-construct); color: #fff; }
+    .block-floors .timeline-number { background: var(--block-floors); color: #000; }
+    .block-finish .timeline-number { background: var(--block-finish); color: #000; }
+    .block-doors .timeline-number { background: var(--block-doors); color: #fff; }
+    .block-facade .timeline-number { background: var(--block-facade); color: #000; }
+
+    .block-system .timeline-tag { background: rgba(139, 148, 158, 0.2); color: var(--block-system); }
+    .block-prep .timeline-tag { background: rgba(248, 81, 73, 0.2); color: var(--block-prep); }
+    .block-comm .timeline-tag { background: rgba(88, 166, 255, 0.2); color: var(--block-comm); }
+    .block-construct .timeline-tag { background: rgba(163, 113, 247, 0.2); color: var(--block-construct); }
+    .block-floors .timeline-tag { background: rgba(240, 136, 62, 0.2); color: var(--block-floors); }
+    .block-finish .timeline-tag { background: rgba(63, 185, 80, 0.2); color: var(--block-finish); }
+    .block-doors .timeline-tag { background: rgba(219, 97, 162, 0.2); color: var(--block-doors); }
+    .block-facade .timeline-tag { background: rgba(57, 197, 207, 0.2); color: var(--block-facade); }
+
+    /* Section Groups */
+    .section-group {
+      margin-bottom: 40px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .section-icon {
+      font-size: 24px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .section-count {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-left: auto;
+    }
+
+    .section-header.block-system { border-color: var(--block-system); }
+    .section-header.block-prep { border-color: var(--block-prep); }
+    .section-header.block-comm { border-color: var(--block-comm); }
+    .section-header.block-construct { border-color: var(--block-construct); }
+    .section-header.block-floors { border-color: var(--block-floors); }
+    .section-header.block-finish { border-color: var(--block-finish); }
+    .section-header.block-doors { border-color: var(--block-doors); }
+    .section-header.block-facade { border-color: var(--block-facade); }
+
+    /* Directions List */
+    .directions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .direction-row {
+      display: grid;
+      grid-template-columns: 50px 32px 1fr auto auto 120px;
+      align-items: center;
+      gap: 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      cursor: pointer;
+      transition: all 0.15s;
+      position: relative;
+    }
+
+    .direction-row::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 3px;
+      border-radius: 8px 0 0 8px;
+    }
+
+    .direction-row:hover {
+      border-color: var(--accent);
+      background: var(--bg-hover);
+    }
+
+    .direction-row.hidden { display: none; }
+
+    /* Block colors for rows */
+    .direction-row.block-system::before { background: var(--block-system); }
+    .direction-row.block-prep::before { background: var(--block-prep); }
+    .direction-row.block-comm::before { background: var(--block-comm); }
+    .direction-row.block-construct::before { background: var(--block-construct); }
+    .direction-row.block-floors::before { background: var(--block-floors); }
+    .direction-row.block-finish::before { background: var(--block-finish); }
+    .direction-row.block-doors::before { background: var(--block-doors); }
+    .direction-row.block-facade::before { background: var(--block-facade); }
+
+    .row-id {
+      font-family: monospace;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .row-icon {
+      font-size: 20px;
+    }
+
+    .row-name {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .row-stages {
+      display: flex;
+      gap: 6px;
+    }
+
+    .stage-badge {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    .stage-badge.черновая {
+      background: rgba(210, 153, 34, 0.2);
+      color: var(--yellow);
+    }
+
+    .stage-badge.чистовая {
+      background: rgba(63, 185, 80, 0.2);
+      color: var(--green);
+    }
+
+    .row-count {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .row-count strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .row-progress {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .progress-bar-mini {
+      width: 80px;
+      height: 6px;
+      background: var(--bg-hover);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-bar-mini .fill {
+      height: 100%;
+      background: var(--green);
+      border-radius: 3px;
+    }
+
+    .progress-pct {
+      font-size: 11px;
+      color: var(--text-muted);
+      min-width: 32px;
+      text-align: right;
+    }
+
+    /* Active filter highlight */
+    .direction-row.highlight {
+      background: rgba(88, 166, 255, 0.1);
+      border-color: var(--accent);
+    }
+
+    @media (max-width: 768px) {
+      .direction-row {
+        grid-template-columns: 40px 24px 1fr auto;
+        gap: 8px;
+        padding: 10px 12px;
+      }
+      .row-stages, .row-progress {
+        display: none;
+      }
+    }
+
+    /* Direction View */
+    .direction-view {
+      display: none;
+    }
+
+    .direction-view.active {
+      display: block;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--accent);
+      font-size: 14px;
+      cursor: pointer;
+      margin-bottom: 20px;
+      padding: 8px 0;
+    }
+
+    .back-btn:hover { text-decoration: underline; }
+
+    .direction-header {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .direction-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+    }
+
+    .direction-header.block-system::before { background: var(--block-system); }
+    .direction-header.block-prep::before { background: var(--block-prep); }
+    .direction-header.block-comm::before { background: var(--block-comm); }
+    .direction-header.block-construct::before { background: var(--block-construct); }
+    .direction-header.block-floors::before { background: var(--block-floors); }
+    .direction-header.block-finish::before { background: var(--block-finish); }
+    .direction-header.block-doors::before { background: var(--block-doors); }
+    .direction-header.block-facade::before { background: var(--block-facade); }
+
+    .direction-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+
+    .direction-title {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .direction-meta {
+      display: flex;
+      gap: 16px;
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .direction-deps {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+
+    .dep-group h4 {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .dep-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .dep-tag {
+      background: var(--bg-hover);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dep-tag:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .dep-tag.requires { border-left: 3px solid var(--yellow); }
+    .dep-tag.opens { border-left: 3px solid var(--green); }
+
+    .dep-tag-icon {
+      font-size: 16px;
+    }
+
+    /* Technologies */
+    .stage-section {
+      margin-bottom: 28px;
+    }
+
+    .stage-title {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .stage-title.черновая { border-color: var(--yellow); }
+    .stage-title.чистовая { border-color: var(--green); }
+
+    .stage-title span {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .stage-title .count {
+      margin-left: auto;
+      background: var(--bg-hover);
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+    }
+
+    .tech-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .tech-item {
+      display: flex;
+      align-items: center;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 18px;
+      transition: all 0.2s;
+    }
+
+    .tech-item:hover {
+      border-color: var(--accent);
+      background: var(--bg-hover);
+    }
+
+    .tech-id {
+      font-family: monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      background: var(--bg-hover);
+      padding: 4px 10px;
+      border-radius: 4px;
+      margin-right: 14px;
+      min-width: 85px;
+      text-align: center;
+    }
+
+    .tech-name {
+      flex: 1;
+      font-size: 14px;
+    }
+
+    .tech-meta {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .tech-difficulty {
+      display: flex;
+      gap: 3px;
+    }
+
+    .tech-difficulty span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+
+    .tech-difficulty span.filled { background: var(--accent); }
+
+    .tech-status {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-weight: 500;
+    }
+
+    .tech-status.draft {
+      background: rgba(139, 148, 158, 0.2);
+      color: var(--text-muted);
+    }
+
+    .tech-status.review {
+      background: rgba(210, 153, 34, 0.2);
+      color: var(--yellow);
+    }
+
+    .tech-status.approved {
+      background: rgba(63, 185, 80, 0.2);
+      color: var(--green);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-muted);
+      font-size: 13px;
+      border-top: 1px solid var(--border);
+      margin-top: 40px;
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    /* No results */
+    .no-results {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+
+    .no-results h3 { margin-bottom: 8px; }
+
+    /* Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      justify-content: center;
+    }
+
+    .modal {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      max-width: 900px;
+      width: 100%;
+      margin: 20px auto;
+      position: relative;
+      max-height: none;
+    }
+
+    .modal-header {
+      position: sticky;
+      top: 0;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+      padding: 20px 24px;
+      border-radius: 12px 12px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      z-index: 10;
+    }
+
+    .modal-header-content {
+      flex: 1;
+    }
+
+    .modal-title {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .modal-meta {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .modal-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .modal-close {
+      background: var(--bg-hover);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 20px;
+      color: var(--text);
+      transition: all 0.2s;
+      flex-shrink: 0;
+      margin-left: 16px;
+    }
+
+    .modal-close:hover {
+      background: var(--bg-card);
+      border-color: var(--accent);
+    }
+
+    .modal-body {
+      padding: 24px;
+    }
+
+    /* Markdown styles */
+    .markdown-content h1 {
+      font-size: 28px;
+      margin: 0 0 16px 0;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .markdown-content h2 {
+      font-size: 20px;
+      margin: 32px 0 16px 0;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+      color: var(--accent);
+    }
+
+    .markdown-content h3 {
+      font-size: 16px;
+      margin: 24px 0 12px 0;
+      color: var(--text);
+    }
+
+    .markdown-content p {
+      margin: 12px 0;
+      line-height: 1.7;
+    }
+
+    .markdown-content blockquote {
+      border-left: 4px solid var(--accent);
+      padding-left: 16px;
+      margin: 16px 0;
+      color: var(--text-muted);
+      font-style: italic;
+      background: var(--bg-card);
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .markdown-content ul, .markdown-content ol {
+      margin: 12px 0;
+      padding-left: 24px;
+    }
+
+    .markdown-content li {
+      margin: 8px 0;
+      line-height: 1.6;
+    }
+
+    .markdown-content code {
+      background: var(--bg-hover);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 13px;
+    }
+
+    .markdown-content pre {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+
+    .markdown-content pre code {
+      background: none;
+      padding: 0;
+    }
+
+    .markdown-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 14px;
+    }
+
+    .markdown-content th {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 12px;
+      text-align: left;
+      font-weight: 600;
+    }
+
+    .markdown-content td {
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+    }
+
+    .markdown-content tr:hover td {
+      background: var(--bg-hover);
+    }
+
+    .markdown-content hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 24px 0;
+    }
+
+    .markdown-content strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .markdown-content input[type="checkbox"] {
+      margin-right: 8px;
+    }
+
+    /* Technology Page */
+    .tech-view {
+      display: none;
+    }
+
+    .tech-view.active {
+      display: block;
+    }
+
+    .tech-page {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    @media (max-width: 1000px) {
+      .tech-page {
+        grid-template-columns: 1fr;
+      }
+      .tech-sidebar {
+        position: static !important;
+      }
+    }
+
+    /* Sidebar */
+    .tech-sidebar {
+      position: sticky;
+      top: 20px;
+    }
+
+    .tech-sidebar-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .tech-sidebar-title {
+      font-size: 11px; /* Standard: labels = 11px */
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    /* Stats grid */
+    .tech-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .tech-stat {
+      text-align: center;
+      padding: 12px 8px;
+      background: var(--bg-hover);
+      border-radius: 8px;
+    }
+
+    .tech-stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .tech-stat-label {
+      font-size: 11px; /* Standard: labels = 11px */
+      color: var(--text-muted);
+    }
+
+    /* TOC */
+    .tech-toc {
+      list-style: none;
+    }
+
+    .tech-toc li {
+      margin-bottom: 8px;
+    }
+
+    .tech-toc a {
+      display: block;
+      padding: 8px 12px;
+      color: var(--text-muted);
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 13px;
+      transition: all 0.2s;
+      border-left: 2px solid transparent;
+    }
+
+    .tech-toc a:hover {
+      background: var(--bg-hover);
+      color: var(--text);
+      border-left-color: var(--accent);
+    }
+
+    .tech-toc a.active {
+      background: rgba(88, 166, 255, 0.1);
+      color: var(--accent);
+      border-left-color: var(--accent);
+    }
+
+    /* Related technologies */
+    .tech-related-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .tech-related-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      background: var(--bg-hover);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tech-related-item:hover {
+      background: var(--bg-card);
+      border-color: var(--accent);
+    }
+
+    .tech-related-id {
+      font-family: monospace;
+      font-size: 10px;
+      color: var(--text-muted);
+      background: var(--bg);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .tech-related-name {
+      flex: 1;
+      font-size: 13px;
+    }
+
+    .tech-related-reason {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Inline related technologies */
+    .tech-related-inline {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 24px 0;
+    }
+
+    .tech-related-inline-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tech-related-inline-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 12px;
+    }
+
+    /* Main content area */
+    .tech-main {
+      min-width: 0;
+    }
+
+    .tech-header {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tech-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+    }
+
+    .tech-header.block-system::before { background: var(--block-system); }
+    .tech-header.block-prep::before { background: var(--block-prep); }
+    .tech-header.block-comm::before { background: var(--block-comm); }
+    .tech-header.block-construct::before { background: var(--block-construct); }
+    .tech-header.block-floors::before { background: var(--block-floors); }
+    .tech-header.block-finish::before { background: var(--block-finish); }
+    .tech-header.block-doors::before { background: var(--block-doors); }
+    .tech-header.block-facade::before { background: var(--block-facade); }
+
+    .tech-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .tech-breadcrumb a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .tech-breadcrumb a:hover {
+      text-decoration: underline;
+    }
+
+    .tech-title-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .tech-icon {
+      font-size: 48px;
+      flex-shrink: 0;
+    }
+
+    .tech-title-content {
+      flex: 1;
+    }
+
+    .tech-title {
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .tech-description {
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .tech-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .tech-meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .tech-meta-stats {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .tech-meta-stat {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .tech-meta-stat-value {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .tech-badge {
+      font-size: 12px;
+      padding: 4px 12px;
+      border-radius: 16px;
+      background: var(--bg-hover);
+      color: var(--text-muted);
+    }
+
+    .tech-badge.stage {
+      border: 1px solid;
+    }
+
+    .tech-badge.черновая {
+      background: rgba(210, 153, 34, 0.2);
+      color: var(--yellow);
+      border-color: var(--yellow);
+    }
+
+    .tech-badge.чистовая {
+      background: rgba(63, 185, 80, 0.2);
+      color: var(--green);
+      border-color: var(--green);
+    }
+
+    /* Flow visualization */
+    .tech-flow {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .tech-flow-title {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .tech-flow-diagram {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .tech-flow-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .tech-flow-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .tech-flow-cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .tech-flow-card {
+      background: var(--bg-hover);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      text-align: center;
+      min-width: 100px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tech-flow-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .tech-flow-card.current {
+      background: rgba(88, 166, 255, 0.15);
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.2);
+    }
+
+    .tech-flow-card-id {
+      font-family: monospace;
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .tech-flow-card-name {
+      font-size: 12px;
+      margin-top: 4px;
+      color: var(--text);
+    }
+
+    .tech-flow-arrow {
+      font-size: 24px;
+      color: var(--text-muted);
+    }
+
+    /* Content sections */
+    .tech-content {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+    }
+
+    .tech-content section {
+      scroll-margin-top: 20px;
+    }
+
+    /* Sticky Navigation */
+    .top-nav {
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+      padding: 12px 20px;
+    }
+
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: 8px;
+      transition: background 0.2s;
+    }
+
+    .nav-logo:hover {
+      background: var(--bg-hover);
+    }
+
+    .nav-logo-icon {
+      font-size: 24px;
+    }
+
+    .nav-logo-text {
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--accent);
+    }
+
+    .nav-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .nav-crumb {
+      color: var(--text-muted);
+      font-size: 13px;
+      white-space: nowrap;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+
+    .nav-crumb:hover {
+      color: var(--text);
+      background: var(--bg-hover);
+    }
+
+    .nav-crumb.active {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .nav-crumb-sep {
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .search-box-nav {
+      display: flex;
+      align-items: center;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 12px;
+      width: 200px;
+    }
+
+    .search-box-nav input {
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 13px;
+      width: 100%;
+      outline: none;
+    }
+
+    .nav-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover {
+      border-color: var(--accent);
+      background: var(--bg-hover);
+    }
+
+    .nav-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* Subtitle */
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-top: 8px;
+    }
+
+    /* Dependency Map */
+    .dependency-map {
+      display: none;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+    .dependency-map.active {
+      display: block;
+    }
+
+    .dependency-map-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .dependency-map-title {
+      font-size: 16px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dependency-map-close {
+      background: var(--bg-hover);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 12px;
+      cursor: pointer;
+      font-size: 12px;
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+
+    .dependency-map-close:hover {
+      color: var(--text);
+      border-color: var(--accent);
+    }
+
+    .dependency-svg {
+      width: 100%;
+      height: 400px;
+      background: var(--bg);
+      border-radius: 8px;
+    }
+
+    .dep-node {
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .dep-node:hover {
+      filter: brightness(1.2);
+    }
+
+    .dep-node-circle {
+      stroke: var(--border);
+      stroke-width: 2;
+    }
+
+    .dep-node-text {
+      fill: var(--text);
+      font-size: 11px;
+      text-anchor: middle;
+      dominant-baseline: middle;
+      pointer-events: none;
+    }
+
+    .dep-node-label {
+      fill: var(--text-muted);
+      font-size: 9px;
+      text-anchor: middle;
+      pointer-events: none;
+    }
+
+    .dep-edge {
+      stroke: var(--border);
+      stroke-width: 1.5;
+      fill: none;
+      marker-end: url(#arrowhead);
+    }
+
+    .dep-edge.highlight {
+      stroke: var(--accent);
+      stroke-width: 2;
+    }
+
+    /* Process Flow in Direction */
+    .process-flow {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .process-flow-title {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .process-steps {
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+      overflow-x: auto;
+      padding: 10px 0;
+    }
+
+    .process-step {
+      flex: 0 0 auto;
+      min-width: 180px;
+      padding: 16px;
+      background: var(--bg-hover);
+      border-radius: 10px;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .process-step:hover {
+      background: var(--bg-card);
+      border-color: var(--accent);
+    }
+
+    .process-step.active {
+      background: rgba(88, 166, 255, 0.15);
+      box-shadow: 0 0 0 2px var(--accent);
+    }
+
+    .process-step-num {
+      position: absolute;
+      top: -10px;
+      left: 16px;
+      background: var(--accent);
+      color: #000;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .process-step-title {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 8px;
+      margin-top: 8px;
+    }
+
+    .process-step-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .process-step-count {
+      font-size: 11px;
+      color: var(--accent);
+    }
+
+    .process-arrow {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      color: var(--text-muted);
+      font-size: 20px;
+    }
+
+    /* Mobile breadcrumb dropdown */
+    .mobile-breadcrumb {
+      display: none;
+      position: relative;
+    }
+
+    .mobile-breadcrumb-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 12px;
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .mobile-breadcrumb-dropdown {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      min-width: 200px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-top: 4px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+      z-index: 200;
+    }
+
+    .mobile-breadcrumb-dropdown.active {
+      display: block;
+    }
+
+    .mobile-breadcrumb-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      color: var(--text);
+      font-size: 13px;
+      cursor: pointer;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .mobile-breadcrumb-item:last-child {
+      border-bottom: none;
+    }
+
+    .mobile-breadcrumb-item:hover {
+      background: var(--bg-hover);
+    }
+
+    .mobile-breadcrumb-item.current {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .timeline-section {
+        padding: 16px;
+      }
+
+      .hero {
+        padding: 28px 20px;
+      }
+
+      .hero-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .direction-header {
+        padding: 20px;
+      }
+
+      .direction-title {
+        font-size: 24px;
+      }
+
+      .nav-logo-text {
+        display: none;
+      }
+
+      .search-box-nav {
+        width: 100px;
+      }
+
+      .nav-breadcrumb {
+        display: none;
+      }
+
+      .mobile-breadcrumb {
+        display: block;
+        flex: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sticky Navigation Bar -->
+  <nav class="top-nav" id="top-nav">
+    <div class="nav-container">
+      <div class="nav-logo" onclick="showMainView()">
+        <span class="nav-logo-icon">🏗️</span>
+        <span class="nav-logo-text">ВШР</span>
+      </div>
+      <div class="nav-breadcrumb" id="nav-breadcrumb">
+        <span class="nav-crumb active">Главная</span>
+      </div>
+      <div class="mobile-breadcrumb" id="mobile-breadcrumb">
+        <button class="mobile-breadcrumb-btn" onclick="toggleMobileBreadcrumb()">
+          <span id="mobile-crumb-label">Главная</span>
+          <span>▼</span>
+        </button>
+        <div class="mobile-breadcrumb-dropdown" id="mobile-dropdown"></div>
+      </div>
+      <div class="nav-actions">
+        <div class="search-box-nav">
+          <input type="text" id="search" placeholder="🔍 Поиск...">
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <!-- Main View -->
+    <div id="main-view">
+      <!-- Compact Stats Bar -->
+      <div class="stats-bar" id="stats-bar"></div>
+
+      <!-- Timeline - Horizontal, Collapsible -->
+      <div class="timeline-section" id="timeline-section">
+        <div class="timeline-header" onclick="toggleTimeline()">
+          <h2>
+            <span>📅</span> Последовательность этапов
+            <span id="active-filter-label"></span>
+          </h2>
+          <span class="timeline-toggle">▼</span>
+        </div>
+        <div class="timeline-horizontal" id="timeline"></div>
+      </div>
+
+      <!-- Directions Grid -->
+      <div id="sections-container"></div>
+
+      <div class="no-results" id="no-results" style="display: none;">
+        <h3>Ничего не найдено</h3>
+        <p>Попробуйте изменить поисковый запрос или фильтры</p>
+      </div>
+    </div>
+
+    <!-- Direction View -->
+    <div id="direction-view" class="direction-view">
+      <div class="back-btn" onclick="showMainView()">← Все направления</div>
+      <div id="direction-content"></div>
+    </div>
+
+    <!-- Technology View -->
+    <div id="tech-view" class="tech-view">
+      <div class="back-btn" id="tech-back-btn">← Назад</div>
+      <div class="tech-page">
+        <div class="tech-sidebar">
+          <!-- Stats -->
+          <div class="tech-sidebar-card">
+            <div class="tech-sidebar-title">📊 Статистика</div>
+            <div class="tech-stats-grid" id="tech-stats"></div>
+          </div>
+
+          <!-- TOC -->
+          <div class="tech-sidebar-card">
+            <div class="tech-sidebar-title">📋 Содержание</div>
+            <ul class="tech-toc" id="tech-toc"></ul>
+          </div>
+
+          <!-- Related -->
+          <div class="tech-sidebar-card" id="tech-related-card" style="display: none;">
+            <div class="tech-sidebar-title">🔗 Связанные технологии</div>
+            <div class="tech-related-list" id="tech-related"></div>
+          </div>
+        </div>
+
+        <div class="tech-main">
+          <div id="tech-header-container"></div>
+          <div id="tech-flow-container"></div>
+          <div class="tech-content">
+            <div class="markdown-content" id="tech-content"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>Виртуальная Школа Ремонта — система стандартизации строительных работ</p>
+      <p>Сгенерировано: <span id="generated-date"></span></p>
+    </footer>
+  </div>
+
+  <!-- Technology Modal -->
+  <div class="modal-overlay" id="tech-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-header-content">
+          <div class="modal-title" id="modal-title"></div>
+          <div class="modal-meta" id="modal-meta"></div>
+        </div>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="markdown-content" id="modal-content"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Markdown parser (simple) -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <script>
+    let DATA = null;
+    let currentFilter = 'all';
+    let searchQuery = '';
+
+    // Icons for directions
+    const DIRECTION_ICONS = {
+      'D00': '📋', // Культура производства
+      'D01': '🔨', // Демонтаж
+      'D02': '⚡', // Электрика
+      'D03': '📡', // Слаботочка
+      'D04': '🔧', // Сантехника
+      'D05': '❄️', // Климат
+      'D06': '🧱', // Монтаж
+      'D07': '🛡️', // Изоляция
+      'D08': '🎯', // Подготовка стен
+      'D09': '🪣', // Штукатурка
+      'D10': '🎨', // Покраска
+      'D11': '📜', // Обои
+      'D12': '🔲', // Плитка
+      'D13': '📐', // Полы черновые
+      'D14': '🪵', // Полы чистовые
+      'D15': '🪟', // Окна
+      'D16': '🚪', // Двери межкомнатные
+      'D17': '🚪', // Двери входные
+      'D18': '🏠'  // Фасад
+    };
+
+    // Block class mapping
+    const BLOCK_CLASSES = {
+      'Системное': 'block-system',
+      'Подготовка': 'block-prep',
+      'Коммуникации': 'block-comm',
+      'Конструктив': 'block-construct',
+      'Полы': 'block-floors',
+      'Отделка': 'block-finish',
+      'Двери/Окна': 'block-doors',
+      'Фасад': 'block-facade'
+    };
+
+    // Block info for sections
+    const BLOCK_INFO = {
+      'Системное': { icon: '📋', title: 'Системное', order: 0 },
+      'Подготовка': { icon: '🔨', title: 'Подготовка', order: 1 },
+      'Коммуникации': { icon: '⚡', title: 'Коммуникации', order: 2 },
+      'Конструктив': { icon: '🧱', title: 'Конструктив', order: 3 },
+      'Полы': { icon: '📐', title: 'Полы', order: 4 },
+      'Отделка': { icon: '🎨', title: 'Отделка', order: 5 },
+      'Двери/Окна': { icon: '🚪', title: 'Двери и окна', order: 6 },
+      'Фасад': { icon: '🏠', title: 'Фасад', order: 7 }
+    };
+
+    // Timeline steps
+    const TIMELINE_STEPS = [
+      { num: 1, class: 'block-system', title: 'Культура производства', desc: 'Организация пространства на весь период работ', directions: ['D00'] },
+      { num: 2, class: 'block-prep', title: 'Демонтаж', desc: 'Снос перегородок, снятие покрытий', directions: ['D01'] },
+      { num: 3, class: 'block-comm', title: 'Коммуникации (черновые)', desc: 'Электрика, сантехника, слаботочка, климат', directions: ['D02', 'D03', 'D04', 'D05'] },
+      { num: 4, class: 'block-construct', title: 'Конструктив', desc: 'Монтаж перегородок, изоляция', directions: ['D06', 'D07'] },
+      { num: 5, class: 'block-floors', title: 'Черновые полы', desc: 'Стяжка, тёплые полы', directions: ['D13'] },
+      { num: 6, class: 'block-finish', title: 'Черновая отделка', desc: 'Штукатурка, подготовка стен', directions: ['D08', 'D09'] },
+      { num: 7, class: 'block-finish', title: 'Чистовая отделка', desc: 'Покраска, обои, плитка', directions: ['D10', 'D11', 'D12'] },
+      { num: 8, class: 'block-floors', title: 'Чистовые полы', desc: 'Ламинат, паркет', directions: ['D14'] },
+      { num: 9, class: 'block-doors', title: 'Двери и окна', desc: 'Установка дверей и окон', directions: ['D15', 'D16', 'D17'] },
+      { num: 10, class: 'block-facade', title: 'Фасад', desc: 'Утепление, отделка фасада', directions: ['D18'] }
+    ];
+
+    async function loadData() {
+      const response = await fetch('data.json');
+      DATA = await response.json();
+      render();
+    }
+
+    let activeTimelineStep = null;
+
+    function render() {
+      renderStatsBar();
+      renderTimeline();
+      renderDirectionsList();
+      updateBreadcrumb('main');
+      document.getElementById('generated-date').textContent =
+        new Date(DATA.meta.generated).toLocaleDateString('ru-RU');
+    }
+
+    // Toggle timeline collapse
+    function toggleTimeline() {
+      document.getElementById('timeline-section').classList.toggle('collapsed');
+    }
+
+    // Filter by timeline step
+    function filterByTimelineStep(stepIndex) {
+      const steps = document.querySelectorAll('.timeline-step');
+
+      if (activeTimelineStep === stepIndex) {
+        // Deselect
+        activeTimelineStep = null;
+        steps.forEach(s => s.classList.remove('active'));
+        document.getElementById('active-filter-label').textContent = '';
+      } else {
+        // Select
+        activeTimelineStep = stepIndex;
+        steps.forEach((s, i) => s.classList.toggle('active', i === stepIndex));
+        const stepData = TIMELINE_STEPS[stepIndex];
+        document.getElementById('active-filter-label').textContent = `→ ${stepData.title}`;
+      }
+
+      renderDirectionsList();
+    }
+
+    // Stats Bar - Compact
+    function renderStatsBar() {
+      const container = document.getElementById('stats-bar');
+      const total = DATA.meta.totalTechnologies;
+      const approved = DATA.directions.reduce((sum, d) => sum + d.stats.byStatus.approved, 0);
+      const pct = total > 0 ? Math.round((approved / total) * 100) : 0;
+
+      container.innerHTML = `
+        <div class="stats-bar-title">
+          <span>🏗️</span> Виртуальная Школа Ремонта
+        </div>
+        <div class="stats-bar-metrics">
+          <div class="stats-metric">
+            <span class="stats-metric-value accent">${DATA.meta.totalDirections}</span>
+            <span>направлений</span>
+          </div>
+          <div class="stats-metric">
+            <span class="stats-metric-value green">${total}</span>
+            <span>технологий</span>
+          </div>
+        </div>
+        <div class="stats-bar-progress">
+          <div class="stats-progress-bar">
+            <div class="stats-progress-fill" style="width: ${pct}%"></div>
+          </div>
+          <span class="stats-progress-label">${pct}% готово</span>
+        </div>
+      `;
+    }
+
+    // Dependency Map (removed from main view, keep function for future use)
+    function renderDependencyMap() {
+      const svg = document.getElementById('dependency-svg');
+      const width = svg.clientWidth || 800;
+      const height = 400;
+
+      // Node positions - arranged in logical flow
+      const positions = {
+        'D01': { x: 80, y: 50 },   // Демонтаж
+        'D02': { x: 180, y: 100 }, // Электрика
+        'D03': { x: 180, y: 170 }, // Слаботочка
+        'D04': { x: 180, y: 240 }, // Сантехника
+        'D05': { x: 300, y: 135 }, // Климат
+        'D06': { x: 300, y: 205 }, // Монтаж
+        'D07': { x: 420, y: 170 }, // Изоляция
+        'D08': { x: 540, y: 100 }, // Подготовка стен
+        'D09': { x: 660, y: 100 }, // Штукатурка
+        'D10': { x: 780, y: 50 },  // Покраска
+        'D11': { x: 780, y: 100 }, // Обои
+        'D12': { x: 780, y: 170 }, // Плитка
+        'D13': { x: 420, y: 280 }, // Полы черновые
+        'D14': { x: 900, y: 135 }, // Полы чистовые
+        'D15': { x: 1000, y: 50 }, // Окна
+        'D16': { x: 1000, y: 100 }, // Двери межком
+        'D17': { x: 1000, y: 150 }, // Двери входные
+        'D18': { x: 540, y: 320 }, // Фасад
+        'D00': { x: 80, y: 320 }   // Культура
+      };
+
+      // Scale to fit
+      const maxX = Math.max(...Object.values(positions).map(p => p.x));
+      const scale = (width - 100) / maxX;
+      Object.keys(positions).forEach(k => {
+        positions[k].x = 50 + positions[k].x * scale * 0.9;
+        positions[k].y = 30 + positions[k].y * 0.95;
+      });
+
+      // Build edges from dependencies
+      let edgesHtml = '';
+      DATA.directions.forEach(dir => {
+        if (dir.requires) {
+          dir.requires.forEach(reqId => {
+            const from = positions[reqId];
+            const to = positions[dir.id];
+            if (from && to) {
+              edgesHtml += `<path class="dep-edge" d="M${from.x},${from.y} Q${(from.x + to.x) / 2},${(from.y + to.y) / 2 - 20} ${to.x},${to.y}"/>`;
+            }
+          });
+        }
+      });
+
+      // Build nodes
+      let nodesHtml = '';
+      DATA.directions.forEach(dir => {
+        const pos = positions[dir.id];
+        if (!pos) return;
+        const color = getBlockColor(dir.block);
+        const icon = DIRECTION_ICONS[dir.id];
+        nodesHtml += `
+          <g class="dep-node" onclick="showDirection('${dir.id}')">
+            <circle class="dep-node-circle" cx="${pos.x}" cy="${pos.y}" r="22" fill="${color}"/>
+            <text class="dep-node-text" x="${pos.x}" y="${pos.y}">${icon}</text>
+            <text class="dep-node-label" x="${pos.x}" y="${pos.y + 35}">${dir.id}</text>
+          </g>
+        `;
+      });
+
+      // Clear and add
+      svg.innerHTML = `
+        <defs>
+          <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#8b949e"/>
+          </marker>
+        </defs>
+        ${edgesHtml}
+        ${nodesHtml}
+      `;
+    }
+
+    function getBlockColor(block) {
+      const colors = {
+        'Системное': '#8b949e',
+        'Подготовка': '#f85149',
+        'Коммуникации': '#58a6ff',
+        'Конструктив': '#a371f7',
+        'Полы': '#f0883e',
+        'Отделка': '#3fb950',
+        'Двери/Окна': '#db61a2',
+        'Фасад': '#39c5cf'
+      };
+      return colors[block] || '#8b949e';
+    }
+
+    // Toggle mobile breadcrumb dropdown
+    function toggleMobileBreadcrumb() {
+      const dropdown = document.getElementById('mobile-dropdown');
+      dropdown.classList.toggle('active');
+    }
+
+    // Close mobile dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      const mobileBreadcrumb = document.getElementById('mobile-breadcrumb');
+      if (!mobileBreadcrumb.contains(e.target)) {
+        document.getElementById('mobile-dropdown').classList.remove('active');
+      }
+    });
+
+    // Update breadcrumb (desktop and mobile)
+    function updateBreadcrumb(view, data = {}) {
+      const breadcrumb = document.getElementById('nav-breadcrumb');
+      const mobileLabel = document.getElementById('mobile-crumb-label');
+      const mobileDropdown = document.getElementById('mobile-dropdown');
+
+      if (view === 'main') {
+        breadcrumb.innerHTML = `<span class="nav-crumb active">Главная</span>`;
+        mobileLabel.textContent = 'Главная';
+        mobileDropdown.innerHTML = `
+          <div class="mobile-breadcrumb-item current" onclick="showMainView()">🏠 Главная</div>
+        `;
+      } else if (view === 'direction') {
+        const dir = DATA.directions.find(d => d.id === data.directionId);
+        const icon = DIRECTION_ICONS[data.directionId] || '📁';
+        breadcrumb.innerHTML = `
+          <span class="nav-crumb" onclick="showMainView()">Главная</span>
+          <span class="nav-crumb-sep">›</span>
+          <span class="nav-crumb active">${icon} ${dir?.name || data.directionId}</span>
+        `;
+        mobileLabel.textContent = dir?.name || data.directionId;
+        mobileDropdown.innerHTML = `
+          <div class="mobile-breadcrumb-item" onclick="showMainView()">🏠 Главная</div>
+          <div class="mobile-breadcrumb-item current">${icon} ${dir?.name || data.directionId}</div>
+        `;
+      } else if (view === 'technology') {
+        const result = findTechnology(data.techId);
+        if (result) {
+          const { tech, direction } = result;
+          const icon = DIRECTION_ICONS[direction.id] || '📁';
+          breadcrumb.innerHTML = `
+            <span class="nav-crumb" onclick="showMainView()">Главная</span>
+            <span class="nav-crumb-sep">›</span>
+            <span class="nav-crumb" onclick="showDirection('${direction.id}')">${icon} ${direction.name}</span>
+            <span class="nav-crumb-sep">›</span>
+            <span class="nav-crumb active">${tech.id}</span>
+          `;
+          mobileLabel.textContent = tech.id;
+          mobileDropdown.innerHTML = `
+            <div class="mobile-breadcrumb-item" onclick="showMainView()">🏠 Главная</div>
+            <div class="mobile-breadcrumb-item" onclick="showDirection('${direction.id}')">${icon} ${direction.name}</div>
+            <div class="mobile-breadcrumb-item current">📄 ${tech.id}</div>
+          `;
+        }
+      }
+      // Close dropdown after navigation
+      mobileDropdown.classList.remove('active');
+    }
+
+    function renderTimeline() {
+      const timeline = document.getElementById('timeline');
+      timeline.innerHTML = TIMELINE_STEPS.map((step, idx) => {
+        const dirCount = step.directions.length;
+        const techCount = step.directions.reduce((sum, id) => {
+          const dir = DATA.directions.find(d => d.id === id);
+          return sum + (dir ? dir.stats.total : 0);
+        }, 0);
+
+        return `
+          <div class="timeline-step ${step.class}" onclick="filterByTimelineStep(${idx})">
+            <div class="timeline-number">${step.num}</div>
+            <div class="timeline-title">${step.title}</div>
+            <div class="timeline-count">${techCount} тех.</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderDirectionsList() {
+      const container = document.getElementById('sections-container');
+      const noResults = document.getElementById('no-results');
+
+      // Get allowed direction IDs from active timeline step
+      let allowedIds = null;
+      if (activeTimelineStep !== null) {
+        allowedIds = new Set(TIMELINE_STEPS[activeTimelineStep].directions);
+      }
+
+      // Filter directions
+      const filtered = DATA.directions.filter(d => {
+        // Timeline filter
+        if (allowedIds && !allowedIds.has(d.id)) return false;
+
+        // Stage filter
+        if (currentFilter === 'черновая' && !d.stages.includes('черновая')) return false;
+        if (currentFilter === 'чистовая' && !d.stages.includes('чистовая')) return false;
+
+        // Search filter
+        if (searchQuery) {
+          const q = searchQuery.toLowerCase();
+          const nameMatch = d.name.toLowerCase().includes(q);
+          const idMatch = d.id.toLowerCase().includes(q);
+          const techMatch = d.technologies.some(t =>
+            t.name.toLowerCase().includes(q) || t.id.toLowerCase().includes(q)
+          );
+          return nameMatch || idMatch || techMatch;
+        }
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = '';
+        noResults.style.display = 'block';
+        return;
+      }
+
+      noResults.style.display = 'none';
+
+      // Sort by timeline order (using the order in TIMELINE_STEPS)
+      const directionOrder = {};
+      TIMELINE_STEPS.forEach((step, stepIdx) => {
+        step.directions.forEach((dirId, dirIdx) => {
+          directionOrder[dirId] = stepIdx * 100 + dirIdx;
+        });
+      });
+
+      const sorted = [...filtered].sort((a, b) => {
+        return (directionOrder[a.id] ?? 999) - (directionOrder[b.id] ?? 999);
+      });
+
+      container.innerHTML = `
+        <div class="directions-list">
+          ${sorted.map(d => renderDirectionRow(d)).join('')}
+        </div>
+      `;
+    }
+
+    function renderDirectionRow(d) {
+      const blockClass = BLOCK_CLASSES[d.block] || '';
+      const icon = DIRECTION_ICONS[d.id] || '📁';
+      const total = d.stats.total || 1;
+      const approved = d.stats.byStatus.approved;
+      const pct = Math.round((approved / total) * 100);
+
+      return `
+        <div class="direction-row ${blockClass}" onclick="showDirection('${d.id}')">
+          <span class="row-id">${d.id}</span>
+          <span class="row-icon">${icon}</span>
+          <span class="row-name">${d.name}</span>
+          <div class="row-stages">
+            ${d.stages.map(s => `<span class="stage-badge ${s}">${s}</span>`).join('')}
+          </div>
+          <div class="row-count"><strong>${d.stats.total}</strong> тех.</div>
+          <div class="row-progress">
+            <div class="progress-bar-mini">
+              <div class="fill" style="width: ${pct}%"></div>
+            </div>
+            <span class="progress-pct">${pct}%</span>
+          </div>
+        </div>
+      `;
+    }
+
+    function setFilter(filter) {
+      currentFilter = filter;
+      renderDirectionsList();
+    }
+
+    function showDirection(id) {
+      const direction = DATA.directions.find(d => d.id === id);
+      if (!direction) return;
+
+      document.getElementById('main-view').style.display = 'none';
+      document.getElementById('direction-view').classList.add('active');
+      document.getElementById('tech-view').classList.remove('active');
+      updateBreadcrumb('direction', { directionId: id });
+      window.scrollTo(0, 0);
+
+      const content = document.getElementById('direction-content');
+      const blockClass = BLOCK_CLASSES[direction.block] || '';
+      const icon = DIRECTION_ICONS[direction.id] || '📁';
+
+      const chernovye = direction.technologies.filter(t => t.stage === 'черновая');
+      const chistovye = direction.technologies.filter(t => t.stage === 'чистовая');
+
+      // Group technologies by process
+      const byProcess = {};
+      direction.technologies.forEach(t => {
+        const proc = t.process || 'Другое';
+        if (!byProcess[proc]) byProcess[proc] = [];
+        byProcess[proc].push(t);
+      });
+
+      const processFlowHtml = Object.keys(byProcess).length > 1 ? `
+        <div class="process-flow">
+          <div class="process-flow-title">🔄 Процессы в направлении</div>
+          <div class="process-steps">
+            ${Object.entries(byProcess).map(([proc, techs], idx) => `
+              ${idx > 0 ? '<div class="process-arrow">→</div>' : ''}
+              <div class="process-step" onclick="filterByProcess('${proc}')">
+                <div class="process-step-num">${idx + 1}</div>
+                <div class="process-step-title">${proc}</div>
+                <div class="process-step-desc">${techs.length} технологий</div>
+                <div class="process-step-count">${techs.filter(t => t.status === 'approved').length}/${techs.length} готово</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      ` : '';
+
+      content.innerHTML = `
+        <div class="direction-header ${blockClass}">
+          <div class="direction-icon">${icon}</div>
+          <div class="card-id" style="display: inline-block; margin-bottom: 8px;">${direction.id}</div>
+          <h1 class="direction-title">${direction.name}</h1>
+          <div class="direction-meta">
+            <span>📄 ${direction.stats.total} технологий</span>
+            <span>📦 ${direction.block}</span>
+            ${direction.stages.map(s => `<span class="stage-badge ${s}">${s}</span>`).join(' ')}
+          </div>
+          <div class="direction-deps">
+            ${direction.requires.length > 0 ? `
+              <div class="dep-group">
+                <h4>⬅️ Требует выполнения</h4>
+                <div class="dep-tags">
+                  ${direction.requires.map(r => {
+                    const dep = DATA.directions.find(d => d.id === r);
+                    const depIcon = DIRECTION_ICONS[r] || '📁';
+                    return `<div class="dep-tag requires" onclick="showDirection('${r}')">
+                      <span class="dep-tag-icon">${depIcon}</span>
+                      ${r} ${dep ? dep.name : ''}
+                    </div>`;
+                  }).join('')}
+                </div>
+              </div>
+            ` : ''}
+            ${direction.opens.length > 0 ? `
+              <div class="dep-group">
+                <h4>➡️ Открывает возможность</h4>
+                <div class="dep-tags">
+                  ${direction.opens.map(o => {
+                    const dep = DATA.directions.find(d => d.id === o);
+                    const depIcon = DIRECTION_ICONS[o] || '📁';
+                    return `<div class="dep-tag opens" onclick="showDirection('${o}')">
+                      <span class="dep-tag-icon">${depIcon}</span>
+                      ${o} ${dep ? dep.name : ''}
+                    </div>`;
+                  }).join('')}
+                </div>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+
+        ${processFlowHtml}
+
+        ${chernovye.length > 0 ? `
+          <div class="stage-section">
+            <h3 class="stage-title черновая">
+              🔨 Черновой этап
+              <span class="count">${chernovye.length} технологий</span>
+            </h3>
+            <div class="tech-list">
+              ${chernovye.map(t => renderTechItem(t)).join('')}
+            </div>
+          </div>
+        ` : ''}
+
+        ${chistovye.length > 0 ? `
+          <div class="stage-section">
+            <h3 class="stage-title чистовая">
+              ✨ Чистовой этап
+              <span class="count">${chistovye.length} технологий</span>
+            </h3>
+            <div class="tech-list">
+              ${chistovye.map(t => renderTechItem(t)).join('')}
+            </div>
+          </div>
+        ` : ''}
+      `;
+    }
+
+    // Filter by process (placeholder - could add highlighting)
+    function filterByProcess(processName) {
+      // For now, just scroll to the tech list - could add filtering later
+      const techList = document.querySelector('.tech-list');
+      if (techList) techList.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function renderTechItem(tech) {
+      const difficultyDots = Array(5).fill(0).map((_, i) =>
+        `<span class="${i < tech.difficulty ? 'filled' : ''}"></span>`
+      ).join('');
+
+      return `
+        <div class="tech-item" onclick="showTechnology('${tech.id}')" style="cursor: pointer;">
+          <span class="tech-id">${tech.id}</span>
+          <span class="tech-name">${tech.name}</span>
+          <div class="tech-meta">
+            <div class="tech-difficulty" title="Сложность: ${tech.difficulty}/5">
+              ${difficultyDots}
+            </div>
+            <span class="tech-status ${tech.status}">${tech.status}</span>
+          </div>
+        </div>
+      `;
+    }
+
+    // Track navigation history
+    let previousView = 'main';
+    let previousDirectionId = null;
+
+    // Find technology by ID across all directions
+    function findTechnology(techId) {
+      for (const dir of DATA.directions) {
+        const tech = dir.technologies.find(t => t.id === techId);
+        if (tech) return { tech, direction: dir };
+      }
+      return null;
+    }
+
+    // Show technology page
+    function showTechnology(techId) {
+      const result = findTechnology(techId);
+      if (!result) return;
+
+      const { tech, direction } = result;
+      const icon = DIRECTION_ICONS[direction.id] || '📁';
+      const blockClass = BLOCK_CLASSES[direction.block] || '';
+
+      // Save previous view for back button
+      if (document.getElementById('direction-view').classList.contains('active')) {
+        previousView = 'direction';
+        previousDirectionId = direction.id;
+      } else {
+        previousView = 'main';
+      }
+
+      // Hide other views
+      document.getElementById('main-view').style.display = 'none';
+      document.getElementById('direction-view').classList.remove('active');
+      document.getElementById('tech-view').classList.add('active');
+      updateBreadcrumb('technology', { techId });
+      window.scrollTo(0, 0);
+
+      // Set back button
+      const backBtn = document.getElementById('tech-back-btn');
+      backBtn.textContent = previousView === 'direction' ? `← ${direction.name}` : '← Все направления';
+      backBtn.onclick = () => {
+        if (previousView === 'direction' && previousDirectionId) {
+          showDirection(previousDirectionId);
+        } else {
+          showMainView();
+        }
+      };
+
+      // Stats are now in header, no longer in sidebar
+
+      // Render TOC - only show if > 5 sections
+      const sections = tech.sections || [];
+      const tocCard = document.getElementById('tech-toc').parentElement;
+
+      if (sections.length > 5) {
+        tocCard.style.display = 'block';
+        const tocIcons = {
+          'Когда применять': '✅',
+          'Когда НЕ применять': '❌',
+          'Преимущества': '👍',
+          'Недостатки': '👎',
+          'Необходимые материалы': '📦',
+          'Необходимые инструменты': '🔧',
+          'Подготовка': '📋',
+          'Пошаговая инструкция': '📝',
+          'Чек-лист качества': '✅',
+          'Приёмка работы': '🎯',
+          'Техника безопасности': '⚠️',
+          'Частые вопросы': '❓',
+          'Связанные технологии': '🔗',
+          'Вопросы для теста': '📚'
+        };
+
+        document.getElementById('tech-toc').innerHTML = sections.map(section => {
+          const icon = tocIcons[section] || '📄';
+          const id = section.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+          return `<li><a href="#${id}" onclick="scrollToSection('${id}')">${icon} ${section}</a></li>`;
+        }).join('');
+      } else {
+        tocCard.style.display = 'none';
+      }
+
+      // Hide related technologies from sidebar - now shown inline
+      const relatedCard = document.getElementById('tech-related-card');
+      relatedCard.style.display = 'none';
+
+      // Render header
+      document.getElementById('tech-header-container').innerHTML = `
+        <div class="tech-header ${blockClass}">
+          <div class="tech-breadcrumb">
+            <a href="#" onclick="showMainView(); return false;">Главная</a>
+            <span>›</span>
+            <a href="#" onclick="showDirection('${direction.id}'); return false;">${icon} ${direction.name}</a>
+            <span>›</span>
+            <span>${tech.id}</span>
+          </div>
+          <div class="tech-title-row">
+            <div class="tech-icon">${icon}</div>
+            <div class="tech-title-content">
+              <h1 class="tech-title">${tech.name}</h1>
+              <p class="tech-description">${tech.description || ''}</p>
+            </div>
+          </div>
+          <div class="tech-badges">
+            <span class="tech-badge stage ${tech.stage}">${tech.stage}</span>
+            <span class="tech-badge">📊 Сложность: ${tech.difficulty}/5</span>
+            <span class="tech-badge">⏱️ ${tech.timeToLearn || 'Время не указано'}</span>
+            <span class="tech-badge">${tech.process || 'Процесс'}</span>
+            <span class="tech-badge tech-status ${tech.status}">${tech.status}</span>
+          </div>
+        </div>
+      `;
+
+      // Render flow visualization
+      renderTechFlow(tech, direction);
+
+      // Render content
+      if (typeof marked !== 'undefined') {
+        let html = marked.parse(tech.content || 'Контент отсутствует');
+        // Add IDs to sections for scrolling
+        html = html.replace(/<h2>([^<]+)<\/h2>/g, (match, title) => {
+          const id = title.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+          return `<h2 id="${id}">${title}</h2>`;
+        });
+        document.getElementById('tech-content').innerHTML = html;
+      } else {
+        document.getElementById('tech-content').innerHTML = `<pre>${tech.content || 'Контент отсутствует'}</pre>`;
+      }
+    }
+
+    // Render flow diagram
+    function renderTechFlow(tech, direction) {
+      const related = tech.related || [];
+      const before = related.filter(r => r.reason && (r.reason.includes('перед') || r.reason.includes('Перед') || r.reason.includes('подготов') || r.reason.includes('не подготов')));
+      const after = related.filter(r => r.reason && (r.reason.includes('после') || r.reason.includes('След') || r.reason.includes('этап')));
+      const alternatives = related.filter(r => r.reason && (r.reason.includes('вместо') || r.reason.includes('альтернатив')));
+
+      // If no clear before/after, show all as related
+      const hasFlow = before.length > 0 || after.length > 0;
+
+      if (!hasFlow && related.length === 0) {
+        document.getElementById('tech-flow-container').innerHTML = '';
+        return;
+      }
+
+      document.getElementById('tech-flow-container').innerHTML = `
+        <div class="tech-flow">
+          <div class="tech-flow-title">📍 Место в процессе</div>
+          <div class="tech-flow-diagram">
+            ${before.length > 0 ? `
+              <div class="tech-flow-group">
+                <div class="tech-flow-label">Перед</div>
+                <div class="tech-flow-cards">
+                  ${before.map(r => `
+                    <div class="tech-flow-card" onclick="showTechnology('${r.id}')">
+                      <div class="tech-flow-card-id">${r.id}</div>
+                      <div class="tech-flow-card-name">${r.name || ''}</div>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+              <div class="tech-flow-arrow">→</div>
+            ` : ''}
+
+            <div class="tech-flow-group">
+              <div class="tech-flow-label">Текущая</div>
+              <div class="tech-flow-cards">
+                <div class="tech-flow-card current">
+                  <div class="tech-flow-card-id">${tech.id}</div>
+                  <div class="tech-flow-card-name">${tech.name}</div>
+                </div>
+              </div>
+            </div>
+
+            ${after.length > 0 ? `
+              <div class="tech-flow-arrow">→</div>
+              <div class="tech-flow-group">
+                <div class="tech-flow-label">После</div>
+                <div class="tech-flow-cards">
+                  ${after.map(r => `
+                    <div class="tech-flow-card" onclick="showTechnology('${r.id}')">
+                      <div class="tech-flow-card-id">${r.id}</div>
+                      <div class="tech-flow-card-name">${r.name || ''}</div>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            ` : ''}
+
+            ${alternatives.length > 0 ? `
+              <div class="tech-flow-group" style="margin-left: 24px;">
+                <div class="tech-flow-label">Альтернативы</div>
+                <div class="tech-flow-cards">
+                  ${alternatives.map(r => `
+                    <div class="tech-flow-card" onclick="showTechnology('${r.id}')">
+                      <div class="tech-flow-card-id">${r.id}</div>
+                      <div class="tech-flow-card-name">${r.name || ''}</div>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      `;
+    }
+
+    // Scroll to section
+    function scrollToSection(id) {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    // Hide tech view
+    function hideTechView() {
+      document.getElementById('tech-view').classList.remove('active');
+    }
+
+    function showMainView() {
+      document.getElementById('main-view').style.display = 'block';
+      document.getElementById('direction-view').classList.remove('active');
+      document.getElementById('tech-view').classList.remove('active');
+      updateBreadcrumb('main');
+      window.scrollTo(0, 0);
+    }
+
+    // Search
+    document.getElementById('search').addEventListener('input', (e) => {
+      searchQuery = e.target.value;
+      renderDirectionsList();
+    });
+
+    // Init
+    loadData();
+  </script>
+</body>
+</html>
